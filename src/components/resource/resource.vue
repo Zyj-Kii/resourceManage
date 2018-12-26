@@ -6,11 +6,9 @@
           @select="handleSelect"
           :defaultActive="defaultActive"
           :header="headerList"></r-header>
-        <div class="container">
-          <keep-alive>
-            <component :is="currentComponent"></component>
-          </keep-alive>
-        </div>
+        <keep-alive>
+          <component :is="currentComponent"></component>
+        </keep-alive>
     </div>
 </template>
 <script>

@@ -85,8 +85,11 @@ header
     line-height 60px
     margin-right 20px
     a
+      transition all .3s
       text-decoration none
       color #fff
+      &:hover
+        color rgb(255, 208 75)
     span
       transition all .3s
       color #fff
