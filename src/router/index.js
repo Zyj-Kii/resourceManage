@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import BaseAccount from 'components/account/BaseAccount'
 import Login from 'components/account/Login'
 import ModifyPassword from 'components/account/ModifyPassword'
-import Resource from 'components/basic/resource'
+import Resource from 'components/resource/resource'
 Vue.use(Router)
 
 const router = new Router({
@@ -30,6 +30,10 @@ const router = new Router({
     {
       path: '/user/resource',
       name: 'Resource',
+      component: Resource
+    },
+    {
+      path: '*',
       component: Resource
     }
   ]
