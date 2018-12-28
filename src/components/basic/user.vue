@@ -6,14 +6,14 @@
           :defaultActive="defaultActive"
           :header="headerList"></r-header>
         <keep-alive>
-          <router-view exclude="Upload"></router-view>
+          <router-view></router-view>
         </keep-alive>
     </div>
 </template>
 <script>
 import RHeader from 'components/basic/r-header'
-import SearchResource from './search'
-import UploadResource from './upload'
+import SearchResource from 'components/resource/search'
+import UploadResource from 'components/resource/upload'
 import Communication from 'components/communication/communication'
 export default {
   name: 'Resource',

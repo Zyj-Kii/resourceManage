@@ -120,22 +120,21 @@ export default {
         this.$post(url, data)
           .then(
             res => {
-              console.table(res)
-              if (res.code === 2000) {
+              if (formData.role === 'admin') {
+                sessionStorage.role = 'admin'
+              } else {
+                sessionStorage.role = 'user'
+              }
+              if (sessionStorage.getItem('goback')) {
+                this.$router.go(-1)
+              } else {
                 this.goToHome('登陆成功')
                 sessionStorage.username = this.formData.account
-                if (formData.role === 'admin') {
-                  sessionStorage.role = 'admin'
-                } else {
-                  sessionStorage.role = 'user'
-                }
-              } else {
-                this.$errorNotify(res.message)
               }
             }
           )
           .catch(error => {
-            console.log(error)
+            this.$errorNotify(error)
           })
       } else if (this.checkRegister()) {
         let url
@@ -178,7 +177,7 @@ export default {
         if (this.formData.role === 'admin') {
           this.$router.push({path: '/admin/index'})
         } else {
-          this.$router.push({path: '/user/resource'})
+          this.$router.push({path: '/user/resource/browse'})
         }
       }, 1500)
     }

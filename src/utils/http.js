@@ -39,6 +39,7 @@ export default {
     // http response 拦截器
     axios.interceptors.response.use(response => {
       if (response.status === 200 && response.data.code === UNAUTHORIZED) {
+        sessionStorage.setItem('goback', 1)
         Router.push({path: '/account/signin'})
         return response
       } else {

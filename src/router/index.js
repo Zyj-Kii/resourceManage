@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import BaseAccount from 'components/account/BaseAccount'
 import Login from 'components/account/Login'
 import ModifyPassword from 'components/account/ModifyPassword'
-import Resource from 'components/resource/resource'
+import User from 'components/basic/user'
 import Upload from 'components/resource/upload'
 import Browse from 'components/resource/search'
 Vue.use(Router)
@@ -30,17 +30,17 @@ const router = new Router({
       ]
     },
     {
-      path: '/user/resource',
+      path: '/user',
       name: 'Resource',
-      component: Resource,
+      component: User,
       children: [
         {
-          path: 'upload',
+          path: 'resource/upload',
           component: Upload,
           meta: {requireAuth: true}
         },
         {
-          path: 'browse',
+          path: 'resource/browse',
           component: Browse
         }
       ]

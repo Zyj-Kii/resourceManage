@@ -5,7 +5,16 @@
         v-for="(item, key) of category"
         :key="key"
         @click="handleCategoryChange(key)"
-        :class="{current: key === activeIndex}">{{item.categoryName}}</li>
+        :class="{current: key === activeIndex}">
+           <el-popover
+            placement="left-end"
+            width="200"
+            trigger="hover"
+            :open-delay="300"
+            :content="item.categoryDescription">
+            <div slot="reference">{{item.categoryName}}</div>
+          </el-popover>
+        </li>
     </ul>
     <div class="table-wrapper" v-show="tableData">
       <el-table :data="tableData" stripe>
@@ -40,10 +49,16 @@
         </el-table-column>
       </el-table>
     </div>
+    <el-pagination
+      v-show="total > 0"
+      layout="prev, pager, next"
+      :page-size="100"
+      :total="total"></el-pagination>
   </div>
 </template>
 <script>
-import { getResourceCategory, getResource } from 'api/category'
+import { getResourceCategory, getResource } from 'api/resource'
+import { RESOURCE_PAGE_SIZE } from 'common/resource'
 import download from 'downloadjs'
 export default {
   name: 'SearchResource',
@@ -53,6 +68,8 @@ export default {
       activeIndex: 0,
       categoryId: -1,
       tableData: null,
+      total: 0,
+      pageSize: RESOURCE_PAGE_SIZE,
       tableInit: [
         {
           title: '资源名称',
@@ -114,6 +131,7 @@ export default {
             item.showResourceLevel = this.reflectLevel(item.resourceLevel)
           }
           this.tableData = res.dataList
+          this.total = res.databaseSum
         })
         .catch(err => {
           this.tableData = []
@@ -173,6 +191,9 @@ export default {
       a
         color #fff
         text-decoration none
+  .el-pagination
+    margin-top 10px
+    text-align center
 .maxImg
   max-height 800px
 </style>

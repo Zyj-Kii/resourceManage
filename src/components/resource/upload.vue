@@ -60,8 +60,7 @@
   </div>
 </template>
 <script>
-import { getResourceCategory } from 'api/category'
-import { upload } from 'api/resource'
+import { upload, getResourceCategory } from 'api/resource'
 export default {
   name: 'UploadResource',
   data () {
@@ -113,6 +112,11 @@ export default {
       this.loading = true
       upload(formdata)
         .then(() => {
+          for (let key in _formData) {
+            _formData[key] = ''
+          }
+          this.$refs.img.clearFiles()
+          this.$refs.file.clearFiles()
           this.loading = false
           this.$successToast('上传资源成功！')
         })
