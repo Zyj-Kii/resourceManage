@@ -1,13 +1,13 @@
 export default {
   install: (Vue) => {
-    Vue.prototype.$successToast = (message, duration = 3000) => {
+    Vue.prototype.$successToast = (message, duration = 1500) => {
       Vue.prototype.$message({
         type: 'success',
         message,
         duration
       })
     }
-    Vue.prototype.$errorToast = (message, duration = 3000) => {
+    Vue.prototype.$errorToast = (message, duration = 1500) => {
       Vue.prototype.$message({
         type: 'error',
         message,

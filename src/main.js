@@ -5,9 +5,13 @@ import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import Http from './utils/http'
 import Toast from './utils/toast'
+import PackUrl from './utils/packUrl'
+import 'styles/global.styl'
 Vue.use(Element)
-Vue.use(Http)
 Vue.use(Toast)
+Vue.use(router)
+Vue.use(Http)
+Vue.use(PackUrl)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

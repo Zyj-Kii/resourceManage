@@ -2,31 +2,39 @@
   <div>
     <header>
       <div class="account">
-        <router-link to="/account/modify">修改密码</router-link>
-        <span @click="handleLogout">退出登录</span>
+        <template v-if="isLogin()">
+          <router-link to="/account/modify">修改密码</router-link>
+          <span @click="handleLogout">退出登录</span>
+        </template>
+        <template v-else>
+          <router-link to="/account/signin">去登录</router-link>
+        </template>
       </div>
       <template v-if="header.length > 0">
         <el-menu
+          :router="true"
           :default-active="defaultActive"
           text-color="#fff"
           active-text-color="rgb(255, 208, 75)"
           background-color="rgb(84, 92, 100)"
           hover
-          mode="horizontal"
-          @select="handleSelect">
+          mode="horizontal">
           <template
             v-for="(item, key) of header">
             <el-submenu
-              :index="'' + key"
               :key="key"
+              :index="'' + key"
               v-if="item.submenu">
               <template slot="title">{{item.title}}</template>
               <el-menu-item
                 v-for="(subItem, subKey) of item.submenu"
-                :index="key + '-' + subKey"
+                :index="subItem.route"
                 :key="subKey">{{subItem.title}}</el-menu-item>
             </el-submenu>
-            <el-menu-item v-else :key="key" :index="'' + key">{{item.title}}</el-menu-item>
+            <el-menu-item
+              v-else
+              :key="key"
+              :index="item.route">{{item.title}}</el-menu-item>
           </template>
         </el-menu>
       </template>
@@ -55,8 +63,8 @@ export default {
     handleLogout () {
       this.$emit('logout')
     },
-    handleSelect (index) {
-      this.$emit('select', index)
+    isLogin () {
+      return !!sessionStorage.getItem('username')
     }
   }
 }

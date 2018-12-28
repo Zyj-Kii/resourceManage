@@ -4,7 +4,7 @@
             <el-form-item label="用户名">
                 <el-input
                     :disabled="true"
-                    v-model="admin"></el-input>
+                    v-model="username"></el-input>
             </el-form-item>
             <el-form-item label="权限">
               <el-radio disabled v-model="role" label="admin">管理员</el-radio>
@@ -41,7 +41,7 @@ export default {
   name: 'ModifyPassword',
   data () {
     return {
-      admin: '',
+      username: '',
       role: '',
       formData: {
         prePassword: '',
@@ -86,7 +86,7 @@ export default {
     }
   },
   activated () {
-    this.admin = sessionStorage.admin
+    this.username = sessionStorage.username
     this.role = sessionStorage.role
   }
 }

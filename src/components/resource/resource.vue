@@ -3,11 +3,10 @@
         <r-header
           @headerChange="handleHeaderChange"
           @logout="handleLogout"
-          @select="handleSelect"
           :defaultActive="defaultActive"
           :header="headerList"></r-header>
         <keep-alive>
-          <component :is="currentComponent"></component>
+          <router-view exclude="Upload"></router-view>
         </keep-alive>
     </div>
 </template>
@@ -26,21 +25,21 @@ export default {
           submenu: [
             {
               title: '资源浏览',
-              operation: 'SearchResource'
+              route: '/user/resource/browse'
             },
             {
               title: '资源上传',
-              operation: 'UploadResource'
+              route: '/user/resource/upload'
             }
           ]
         },
         {
           title: '用户交流区',
-          operation: 'Communication'
+          route: '/user/communicate'
         }
       ],
       currentComponent: 'SearchResource',
-      defaultActive: '0-0'
+      defaultActive: '/user/resource/browse'
     }
   },
   methods: {
@@ -57,14 +56,6 @@ export default {
             }, 1500)
           }
         })
-    },
-    handleSelect (index) {
-      if (index.indexOf('-') !== -1) {
-        let cascade = index.split('-')
-        this._handleHeaderChange(this.headerList[cascade[0]].submenu[cascade[1]].operation)
-      } else {
-        this._handleHeaderChange(this.headerList[index].operation)
-      }
     },
     _handleHeaderChange (operation) {
       this.currentComponent = operation

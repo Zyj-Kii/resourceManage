@@ -123,7 +123,7 @@ export default {
               console.table(res)
               if (res.code === 2000) {
                 this.goToHome('登陆成功')
-                sessionStorage.admin = this.formData.account
+                sessionStorage.username = this.formData.account
                 if (formData.role === 'admin') {
                   sessionStorage.role = 'admin'
                 } else {
