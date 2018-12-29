@@ -86,6 +86,7 @@ export default {
 header
   overflow hidden
   background-color rgb(84,92,100)
+  margin-bottom 20px
   .el-menu
     float left
     margin-left 50%
