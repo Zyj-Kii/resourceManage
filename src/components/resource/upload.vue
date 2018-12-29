@@ -62,7 +62,7 @@
 <script>
 import { upload, getResourceCategory } from 'api/resource'
 export default {
-  name: 'UploadResource',
+  name: 'ResourceUpload',
   data () {
     return {
       selectOption: null,

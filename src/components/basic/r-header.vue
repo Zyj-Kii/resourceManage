@@ -2,7 +2,7 @@
   <div>
     <header>
       <div class="account">
-        <template v-if="isLogin()">
+        <template v-if="loginStatus">
           <router-link to="/account/modify">修改密码</router-link>
           <span @click="handleLogout">退出登录</span>
         </template>
@@ -55,6 +55,11 @@ export default {
       default: '0'
     }
   },
+  data () {
+    return {
+      isLogin: false
+    }
+  },
   methods: {
     changeArea (index) {
       this.defaultActive = index
@@ -62,10 +67,15 @@ export default {
     },
     handleLogout () {
       this.$emit('logout')
-    },
-    isLogin () {
-      return !!sessionStorage.getItem('username')
     }
+  },
+  computed: {
+    loginStatus () {
+      return this.isLogin
+    }
+  },
+  activated () {
+    this.isLogin = !!sessionStorage.getItem('username')
   }
 }
 </script>

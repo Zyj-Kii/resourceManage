@@ -12,9 +12,6 @@
 </template>
 <script>
 import RHeader from 'components/basic/r-header'
-import SearchResource from 'components/resource/search'
-import UploadResource from 'components/resource/upload'
-import Communication from 'components/communication/communication'
 export default {
   name: 'Resource',
   data () {
@@ -35,7 +32,16 @@ export default {
         },
         {
           title: '用户交流区',
-          route: '/user/communicate'
+          submenu: [
+            {
+              title: '查看帖子',
+              route: '/user/communicate/browse'
+            },
+            {
+              title: '发布帖子',
+              route: '/user/communicate/post'
+            }
+          ]
         }
       ],
       currentComponent: 'SearchResource',
@@ -51,6 +57,8 @@ export default {
         .then(res => {
           if (res.code === 2000) {
             this.$successToast('退出登录成功')
+            sessionStorage.removeItem('role')
+            sessionStorage.removeItem('username')
             setTimeout(() => {
               this.$router.push({path: '/account/signin'})
             }, 1500)
@@ -62,10 +70,7 @@ export default {
     }
   },
   components: {
-    RHeader,
-    SearchResource,
-    UploadResource,
-    Communication
+    RHeader
   }
 }
 </script>

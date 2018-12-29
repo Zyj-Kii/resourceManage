@@ -36,6 +36,8 @@
 </template>
 
 <script>
+const HOME = 0
+const BACK = 1
 export default {
   name: 'Login',
   data () {
@@ -126,10 +128,11 @@ export default {
                 sessionStorage.role = 'user'
               }
               if (sessionStorage.getItem('goback')) {
-                this.$router.go(-1)
+                sessionStorage.removeItem('goback')
+                this.successGo(BACK, '登陆成功')
               } else {
-                this.goToHome('登陆成功')
                 sessionStorage.username = this.formData.account
+                this.successGo(HOME, '登陆成功')
               }
             }
           )
@@ -160,7 +163,7 @@ export default {
           .then(
             res => {
               if (res.code === 2000) {
-                this.goToHome('注册成功')
+                this.successGo(HOME, '注册成功')
               } else {
                 this.$errorNotify(res.message)
               }
@@ -171,15 +174,23 @@ export default {
           })
       }
     },
-    goToHome (message) {
+    successGo (target, message) {
       this.$successToast(message, 1500)
-      setTimeout(() => {
-        if (this.formData.role === 'admin') {
-          this.$router.push({path: '/admin/index'})
-        } else {
-          this.$router.push({path: '/user/resource/browse'})
-        }
-      }, 1500)
+      if (target === HOME) {
+        setTimeout(this._goHome, 1500)
+      } else {
+        setTimeout(this._goBack, 1500)
+      }
+    },
+    _goHome () {
+      if (this.formData.role === 'admin') {
+        this.$router.push({path: '/admin/index'})
+      } else {
+        this.$router.push({path: '/user/resource/browse'})
+      }
+    },
+    _goBack () {
+      this.$router.go(-1)
     }
   },
   activated () {

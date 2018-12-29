@@ -61,7 +61,7 @@ import { getResourceCategory, getResource } from 'api/resource'
 import { RESOURCE_PAGE_SIZE } from 'common/resource'
 import download from 'downloadjs'
 export default {
-  name: 'SearchResource',
+  name: 'ResourceBrowse',
   data () {
     return {
       category: [],
@@ -102,6 +102,10 @@ export default {
       }
     },
     handleDownload (url) {
+      if (!sessionStorage.getItem('username')) {
+        this.$errorToast('请先登录!')
+        return
+      }
       let fileData = url.replace(/\\/g, '/')
       url = this.packUrl(fileData)
       fileData = fileData.split('/')

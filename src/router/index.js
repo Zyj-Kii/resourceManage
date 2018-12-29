@@ -4,8 +4,10 @@ import BaseAccount from 'components/account/BaseAccount'
 import Login from 'components/account/Login'
 import ModifyPassword from 'components/account/ModifyPassword'
 import User from 'components/basic/user'
-import Upload from 'components/resource/upload'
-import Browse from 'components/resource/search'
+import ResourceUpload from 'components/resource/upload'
+import ResourceBrowse from 'components/resource/browse'
+import CommunicationBrowse from 'components/communication/browse'
+import CommunicationPost from 'components/communication/post'
 Vue.use(Router)
 
 const router = new Router({
@@ -36,12 +38,21 @@ const router = new Router({
       children: [
         {
           path: 'resource/upload',
-          component: Upload,
+          component: ResourceUpload,
           meta: {requireAuth: true}
         },
         {
           path: 'resource/browse',
-          component: Browse
+          component: ResourceBrowse
+        },
+        {
+          path: 'communicate/browse',
+          component: CommunicationBrowse
+        },
+        {
+          path: 'communicate/post',
+          component: CommunicationPost,
+          meta: {requireAuth: true}
         }
       ]
     },
