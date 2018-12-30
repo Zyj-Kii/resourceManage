@@ -37,7 +37,7 @@
             </el-popover>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="资源下载">
+        <el-table-column align="center" label="操作">
           <template slot-scope="scope">
             <el-button
             type="info"
@@ -45,6 +45,10 @@
             round
             @click="handleDownload(scope.row.resourceFile)"
           >下载<i class="el-icon-download el-icon--right"></i></el-button>
+          <el-button
+            size="mini"
+            @click="handleCollect(scope.row.resourceId)"
+            type="warning" round>收藏<i class="el-icon-star-off"></i></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -57,7 +61,7 @@
   </div>
 </template>
 <script>
-import { getResourceCategory, getResource } from 'api/resource'
+import { getResourceCategory, getResource, collectResource } from 'api/resource'
 import { RESOURCE_PAGE_SIZE } from 'common/resource'
 import download from 'downloadjs'
 export default {
@@ -91,6 +95,17 @@ export default {
       this.activeIndex = index
       this._getResource(this.category[index].categoryId, 1)
     },
+    handleCollect (resourceId) {
+      if (this._checkLogin) {
+        collectResource(resourceId)
+          .then(() => {
+            this.$successToast('收藏资源成功')
+          })
+          .catch(err => {
+            this.$errorToast(err)
+          })
+      }
+    },
     reflectLevel (level) {
       switch (level) {
         case 'primary':
@@ -102,17 +117,15 @@ export default {
       }
     },
     handleDownload (url) {
-      if (!sessionStorage.getItem('username')) {
-        this.$errorToast('请先登录!')
-        return
+      if (this._checkLogin) {
+        let fileData = url.replace(/\\/g, '/')
+        url = this.packUrl(fileData)
+        fileData = fileData.split('/')
+        let length = fileData.length
+        const ext = fileData[length - 1].split('.')[1]
+        const filename = fileData[length - 1]
+        download(url, filename, ext)
       }
-      let fileData = url.replace(/\\/g, '/')
-      url = this.packUrl(fileData)
-      fileData = fileData.split('/')
-      let length = fileData.length
-      const ext = fileData[length - 1].split('.')[1]
-      const filename = fileData[length - 1]
-      download(url, filename, ext)
     },
     packUrl (url) {
       return this.$packUrl(url)
@@ -144,6 +157,13 @@ export default {
     },
     _getResourceCategory () {
       return getResourceCategory()
+    },
+    _checkLogin () {
+      if (!sessionStorage.getItem('username')) {
+        this.$errorToast('请先登录')
+        return false
+      }
+      return true
     }
   },
   mounted () {

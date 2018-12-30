@@ -12,7 +12,7 @@
           :prop="item.prop"
           :label="item.label"></el-table-column>
         <el-table-column
-          label="评论"
+          label="操作"
           align="center">
           <template slot-scope="scope">
             <el-button

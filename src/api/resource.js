@@ -21,3 +21,8 @@ export function getResource (categoryId, page) {
   }
   return Vue.prototype.$get(url, data)
 }
+export function collectResource (resourceId) {
+  const url = '/user/collect/collectResource'
+  const data = {resourceId}
+  return Vue.prototype.$get(url, data)
+}
