@@ -8,6 +8,8 @@ import ResourceUpload from 'components/resource/upload'
 import ResourceBrowse from 'components/resource/browse'
 import CommunicationBrowse from 'components/communication/browse'
 import CommunicationPost from 'components/communication/post'
+
+import Admin from 'components/basic/admin'
 Vue.use(Router)
 
 const router = new Router({
@@ -77,6 +79,12 @@ const router = new Router({
           component: ResourceBrowse
         }
       ]
+    },
+    {
+      path: '/admin',
+      name: 'Admin',
+      meta: {requireAuth: true},
+      component: Admin
     },
     {
       path: '*',

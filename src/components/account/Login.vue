@@ -28,7 +28,7 @@
                         v-model="formData.confirmPassword">
                     </el-input>
                 </el-form-item>
-                <el-button @click="submit" type="primary">{{type}}</el-button>
+                <el-button @click="submit" type="info">{{type}}</el-button>
                 <a @click="swap" href="javascript:void(0)" class="toggle">{{toggle}}</a>
             </el-form>
         </div>
@@ -184,7 +184,7 @@ export default {
     },
     _goHome () {
       if (this.formData.role === 'admin') {
-        this.$router.push({path: '/admin/index'})
+        this.$router.push({path: '/admin'})
       } else {
         this.$router.push({path: '/user/resource/browse'})
       }
@@ -206,17 +206,17 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-    .box
-        position fixed
-        top 50%
-        left 50%
-        transform translate(-50%,-100%)
-        background #fff
-        padding 30px
-        border-radius 5px
-        width 400px
-        text-align center
-        .toggle
-            margin-left 10px
-            color #ffa100
+.box
+  position fixed
+  top 50%
+  left 50%
+  transform translate(-50%,-100%)
+  background #fff
+  padding 30px
+  border-radius 5px
+  width 400px
+  text-align center
+  .toggle
+    margin-left 10px
+    color #ffa100
 </style>
