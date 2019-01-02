@@ -20,6 +20,12 @@
               round
               @click="handleGetComment(scope.row.messageId)"
               size="mini">查看评论</el-button>
+            <template v-if="operation === 'delete'">
+              <el-button
+                size="mini"
+                @click="handleDelete(scope.row.messageId)"
+                type="danger" round>删除帖子<i class="el-icon-delete el-icon--right"></i></el-button>
+            </template>
           </template>
         </el-table-column>
       </el-table>
@@ -27,6 +33,7 @@
         :total="total"
         layout="prev, pager, next"
         @current-change="handleCurrentPageChange"
+        :current-page.sync="currentPage"
         :page-size="pageSize"></el-pagination>
     </template>
     <el-dialog title="评论" :visible.sync="dialogShow">
@@ -35,7 +42,7 @@
   </div>
 </template>
 <script>
-import { getPost } from 'api/communication'
+import { getPost, deletePost } from 'api/communication'
 import { POST_LIMIT } from 'common/communication'
 import Comment from 'components/communication/comment'
 export default {
@@ -45,7 +52,8 @@ export default {
       tableData: null,
       dialogShow: false,
       currentPostId: 0,
-      total: 0
+      total: 0,
+      operation: 'none'
     }
   },
   methods: {
@@ -63,6 +71,16 @@ export default {
     handleHideDialog () {
       this.dialogShow = false
     },
+    handleDelete (postId) {
+      deletePost(postId)
+        .then(() => {
+          this.$successToast('删除帖子成功')
+          this._getPost(this.currentPage)
+        })
+        .catch(err => {
+          this.$errorNotify(err)
+        })
+    },
     _getPost (page) {
       getPost(page)
         .then(res => {
@@ -75,44 +93,57 @@ export default {
         .catch(err => {
           this.$errorNotify(err)
         })
+    },
+    _setTableInit () {
+      const name = this.$route.name
+      let flag = false
+      if (name === 'CommunicationBrowse') {
+        this.tableInit = [
+          {
+            label: '用户',
+            prop: 'userName'
+          },
+          {
+            label: '正文',
+            prop: 'messageContent'
+          },
+          {
+            label: '发布时间',
+            prop: 'showSendTime'
+          }
+        ]
+        this.operation = 'none'
+        flag = true
+      } else if (name === 'PrivatePost') {
+        this.tableInit = [
+          {
+            label: '正文',
+            prop: 'messageContent'
+          },
+          {
+            label: '发布时间',
+            prop: 'showSendTime'
+          }
+        ]
+        this.operation = 'delete'
+        flag = true
+      }
+      if (flag) {
+        this._getPost(1)
+      }
     }
-  },
-  activated () {
-    console.log('aaa')
   },
   mounted () {
-    this._getPost(1)
+    this._setTableInit()
   },
   created () {
-    this.tableInit = [
-      {
-        label: '正文',
-        prop: 'messageContent'
-      },
-      {
-        label: '发布时间',
-        prop: 'showSendTime'
-      }
-    ]
-    if (this.$route.name !== 'PrivatePost') {
-      this.tableInit.unshift({
-        label: '用户',
-        prop: 'userName'
-      })
-    }
+    this.tableInit = []
     this.pageSize = POST_LIMIT
+    this.currentPage = -1
   },
   watch: {
     $route () {
-      if (this.$route.name === 'CommunicationBrowse') {
-        this.tableInit.unshift({
-          label: '用户',
-          prop: 'userName'
-        })
-      } else {
-        this.tableInit.shift()
-      }
-      this._getPost(1)
+      this._setTableInit()
     }
   },
   components: {

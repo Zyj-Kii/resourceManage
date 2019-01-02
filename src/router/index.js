@@ -67,12 +67,14 @@ const router = new Router({
         {
           path: 'private/collect',
           name: 'PrivateCollect',
-          meta: {requireAuth: true}
+          meta: {requireAuth: true},
+          component: ResourceBrowse
         },
         {
           path: 'private/resource',
           name: 'PrivateResource',
-          meta: {requireAuth: true}
+          meta: {requireAuth: true},
+          component: ResourceBrowse
         }
       ]
     },

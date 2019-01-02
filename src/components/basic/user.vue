@@ -5,7 +5,7 @@
           @logout="handleLogout"
           :defaultActive="defaultActive"
           :header="headerList"></r-header>
-        <keep-alive exclude="CommunicationBrowse">
+        <keep-alive>
           <router-view></router-view>
         </keep-alive>
     </div>

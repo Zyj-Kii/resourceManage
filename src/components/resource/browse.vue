@@ -45,10 +45,24 @@
             round
             @click="handleDownload(scope.row.resourceFile)"
           >下载<i class="el-icon-download el-icon--right"></i></el-button>
-          <el-button
-            size="mini"
-            @click="handleCollect(scope.row.resourceId)"
-            type="warning" round>收藏<i class="el-icon-star-off"></i></el-button>
+            <template v-if="operation === 'collect'">
+              <el-button
+                size="mini"
+                @click="handleCollect(scope.row.resourceId)"
+                type="warning" round>收藏<i class="el-icon-star-off el-icon--right"></i></el-button>
+            </template>
+            <template v-else-if="operation === 'cancelCollect'">
+              <el-button
+                size="mini"
+                @click="handleCancelCollect(scope.row.collectId)"
+                type="warning" round>取消收藏<i class="el-icon-star-off el-icon--right"></i></el-button>
+            </template>
+            <template v-else>
+              <el-button
+                size="mini"
+                @click="handleDelete(scope.row.resourceId)"
+                type="danger" round>删除资源<i class="el-icon-delete el-icon--right"></i></el-button>
+            </template>
           </template>
         </el-table-column>
       </el-table>
@@ -58,11 +72,17 @@
       layout="prev, pager, next"
       @current-change="handlePageChange"
       :page-size="pageSize"
+      :current-page.sync="currentPage"
       :total="total"></el-pagination>
   </div>
 </template>
 <script>
-import { getResourceCategory, getResource, collectResource } from 'api/resource'
+import {
+  getResourceCategory,
+  getResource,
+  collectResource,
+  deleteResource,
+  cancelCollect} from 'api/resource'
 import { RESOURCE_PAGE_SIZE } from 'common/resource'
 import download from 'downloadjs'
 export default {
@@ -74,6 +94,7 @@ export default {
       tableData: null,
       total: 0,
       pageSize: RESOURCE_PAGE_SIZE,
+      operation: 'download',
       tableInit: [
         {
           title: '资源名称',
@@ -105,6 +126,26 @@ export default {
             this.$errorToast(err)
           })
       }
+    },
+    handleCancelCollect (collectId) {
+      cancelCollect(collectId)
+        .then(() => {
+          this.$successToast('取消收藏成功！')
+          this._getResource(this.currentPage)
+        })
+        .catch(err => {
+          this.$errorNotify(err)
+        })
+    },
+    handleDelete (resourceId) {
+      deleteResource(resourceId)
+        .then(() => {
+          this.$successToast('删除资源成功！')
+          this._getResource(this.currentPage)
+        })
+        .catch(err => {
+          this.$errorNotify(err)
+        })
     },
     handlePageChange (page) {
       this._getResource(page)
@@ -143,7 +184,13 @@ export default {
       }
     },
     _getResource (page) {
-      getResource(this.category[this.activeIndex].categoryId, page)
+      let categoryId
+      if (this.category.length > 0) {
+        categoryId = this.category[this.activeIndex].categoryId
+      } else {
+        categoryId = -1
+      }
+      getResource(categoryId, page)
         .then(res => {
           for (let item of res.dataList) {
             item.img = this.$packUrl(item.resourceImage)
@@ -166,10 +213,36 @@ export default {
         return false
       }
       return true
+    },
+    _setOperation (name) {
+      let flag = false
+      if (name === 'ResourceBrowse') {
+        this._resourceInit()
+        this.operation = 'collect'
+        return
+      } else if (name === 'PrivateCollect') {
+        this.operation = 'cancelCollect'
+        flag = true
+      } else if (name === 'PrivateResource') {
+        this.operation = 'delete'
+        flag = true
+      }
+      if (flag) {
+        this.category = []
+        this._getResource(1)
+      }
     }
   },
   mounted () {
-    this._resourceInit()
+    this._setOperation(this.$route.name)
+  },
+  watch: {
+    $route () {
+      this._setOperation(this.$route.name)
+    }
+  },
+  created () {
+    this.currentPage = -1
   }
 }
 </script>
