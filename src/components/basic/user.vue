@@ -5,7 +5,7 @@
           @logout="handleLogout"
           :defaultActive="defaultActive"
           :header="headerList"></r-header>
-        <keep-alive>
+        <keep-alive exclude="CommunicationBrowse">
           <router-view></router-view>
         </keep-alive>
     </div>
@@ -40,6 +40,23 @@ export default {
             {
               title: '发布帖子',
               route: '/user/communicate/post'
+            }
+          ]
+        },
+        {
+          title: '个人中心',
+          submenu: [
+            {
+              title: '我的资源',
+              route: '/user/private/resource'
+            },
+            {
+              title: '我的收藏',
+              route: '/user/private/collect'
+            },
+            {
+              title: '我的贴子',
+              route: '/user/private/post'
             }
           ]
         }

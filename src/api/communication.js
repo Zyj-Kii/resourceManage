@@ -1,7 +1,13 @@
 import Vue from 'vue'
+import Router from '@/router'
 import { POST_LIMIT, COMMENT_LIMIT } from 'common/communication'
 export function getPost (page) {
-  const url = '/common/message/getAllMessage'
+  let url
+  if (Router.history.current.path === '/user/communicate/browse') {
+    url = '/common/message/getAllMessage'
+  } else {
+    url = '/user/message/getMessage'
+  }
   const limit = POST_LIMIT
   const data = {
     page,

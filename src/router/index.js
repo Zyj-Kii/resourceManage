@@ -39,19 +39,39 @@ const router = new Router({
         {
           path: 'resource/upload',
           component: ResourceUpload,
+          name: 'ResourceUpload',
           meta: {requireAuth: true}
         },
         {
           path: 'resource/browse',
+          name: 'ResourceBrowse',
           component: ResourceBrowse
         },
         {
           path: 'communicate/browse',
+          name: 'CommunicationBrowse',
           component: CommunicationBrowse
         },
         {
           path: 'communicate/post',
+          name: 'CommunicationPost',
           component: CommunicationPost,
+          meta: {requireAuth: true}
+        },
+        {
+          path: 'private/post',
+          name: 'PrivatePost',
+          meta: {requireAuth: true},
+          component: CommunicationBrowse
+        },
+        {
+          path: 'private/collect',
+          name: 'PrivateCollect',
+          meta: {requireAuth: true}
+        },
+        {
+          path: 'private/resource',
+          name: 'PrivateResource',
           meta: {requireAuth: true}
         }
       ]

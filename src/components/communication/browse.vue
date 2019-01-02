@@ -77,15 +77,14 @@ export default {
         })
     }
   },
+  activated () {
+    console.log('aaa')
+  },
   mounted () {
     this._getPost(1)
   },
   created () {
     this.tableInit = [
-      {
-        label: '用户',
-        prop: 'userName'
-      },
       {
         label: '正文',
         prop: 'messageContent'
@@ -95,7 +94,26 @@ export default {
         prop: 'showSendTime'
       }
     ]
+    if (this.$route.name !== 'PrivatePost') {
+      this.tableInit.unshift({
+        label: '用户',
+        prop: 'userName'
+      })
+    }
     this.pageSize = POST_LIMIT
+  },
+  watch: {
+    $route () {
+      if (this.$route.name === 'CommunicationBrowse') {
+        this.tableInit.unshift({
+          label: '用户',
+          prop: 'userName'
+        })
+      } else {
+        this.tableInit.shift()
+      }
+      this._getPost(1)
+    }
   },
   components: {
     Comment

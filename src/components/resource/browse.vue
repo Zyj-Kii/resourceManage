@@ -56,7 +56,8 @@
     <el-pagination
       v-show="total > 0"
       layout="prev, pager, next"
-      :page-size="100"
+      @current-change="handlePageChange"
+      :page-size="pageSize"
       :total="total"></el-pagination>
   </div>
 </template>
@@ -70,7 +71,6 @@ export default {
     return {
       category: [],
       activeIndex: 0,
-      categoryId: -1,
       tableData: null,
       total: 0,
       pageSize: RESOURCE_PAGE_SIZE,
@@ -93,10 +93,10 @@ export default {
   methods: {
     handleCategoryChange (index) {
       this.activeIndex = index
-      this._getResource(this.category[index].categoryId, 1)
+      this._getResource(1)
     },
     handleCollect (resourceId) {
-      if (this._checkLogin) {
+      if (this._checkLogin()) {
         collectResource(resourceId)
           .then(() => {
             this.$successToast('收藏资源成功')
@@ -105,6 +105,9 @@ export default {
             this.$errorToast(err)
           })
       }
+    },
+    handlePageChange (page) {
+      this._getResource(page)
     },
     reflectLevel (level) {
       switch (level) {
@@ -117,7 +120,7 @@ export default {
       }
     },
     handleDownload (url) {
-      if (this._checkLogin) {
+      if (this._checkLogin()) {
         let fileData = url.replace(/\\/g, '/')
         url = this.packUrl(fileData)
         fileData = fileData.split('/')
@@ -134,14 +137,13 @@ export default {
       try {
         const categoryType = await this._getResourceCategory()
         this.category = categoryType.dataList
-        this.categoryId = categoryType.dataList[0].categoryId
-        this._getResource(this.categoryId, 1)
+        this._getResource(1)
       } catch (err) {
         this.$errorNotify(err)
       }
     },
-    _getResource (categoryId, page) {
-      getResource(categoryId, page)
+    _getResource (page) {
+      getResource(this.category[this.activeIndex].categoryId, page)
         .then(res => {
           for (let item of res.dataList) {
             item.img = this.$packUrl(item.resourceImage)
