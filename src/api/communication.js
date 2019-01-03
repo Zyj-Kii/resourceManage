@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from '@/router'
 import { POST_LIMIT, COMMENT_LIMIT } from 'common/communication'
-// 获取帖子
+// 获取帖子 根据路由判断获取所有帖子还是获取用户的帖子
 export function getPost (page) {
   let url
   if (Router.history.current.path === '/user/communicate/browse') {
@@ -44,7 +44,7 @@ export function comment (messageId, commentContent) {
 }
 // 用户删除帖子
 export function deletePost (messageId) {
-  const url = '/user/message/userDeleteMessage'
+  const url = '/user/message/deleteMessage'
   const data = {messageId}
   return Vue.prototype.$get(url, data)
 }

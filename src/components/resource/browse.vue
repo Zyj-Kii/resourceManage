@@ -40,7 +40,7 @@
         <el-table-column align="center" label="操作">
           <template slot-scope="scope">
             <el-button
-            type="info"
+            :type="buttonType"
             size="mini"
             round
             @click="handleDownload(scope.row.resourceFile)"
@@ -84,6 +84,7 @@ import {
   deleteResource,
   cancelCollect} from 'api/resource'
 import { RESOURCE_PAGE_SIZE } from 'common/resource'
+import { BUTTON_TYPE } from 'common/base'
 import download from 'downloadjs'
 export default {
   name: 'ResourceBrowse',
@@ -108,7 +109,8 @@ export default {
           title: '资源等级',
           prop: 'showResourceLevel'
         }
-      ]
+      ],
+      buttonType: BUTTON_TYPE
     }
   },
   methods: {

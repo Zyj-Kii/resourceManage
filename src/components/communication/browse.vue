@@ -16,7 +16,7 @@
           align="center">
           <template slot-scope="scope">
             <el-button
-              type="info"
+              :type="buttonType"
               round
               @click="handleGetComment(scope.row.messageId)"
               size="mini">查看评论</el-button>
@@ -44,6 +44,7 @@
 <script>
 import { getPost, deletePost } from 'api/communication'
 import { POST_LIMIT } from 'common/communication'
+import { BUTTON_TYPE } from 'common/base'
 import Comment from 'components/communication/comment'
 export default {
   name: 'CommunicationBrowse',
@@ -51,6 +52,7 @@ export default {
     return {
       tableData: null,
       dialogShow: false,
+      buttonType: BUTTON_TYPE,
       currentPostId: 0,
       total: 0,
       operation: 'none'

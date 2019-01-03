@@ -51,7 +51,7 @@
         </el-upload>
       </el-form-item>
       <el-form-item>
-        <el-button @click="handleUpload" type="info">上传</el-button>
+        <el-button @click="handleUpload" :type="buttonType">上传</el-button>
       </el-form-item>
     </el-form>
     <el-dialog top="10px" width="30%" :visible.sync="dialogVisible">
@@ -61,6 +61,7 @@
 </template>
 <script>
 import { upload, getResourceCategory } from 'api/resource'
+import { BUTTON_TYPE } from 'common/base'
 export default {
   name: 'ResourceUpload',
   data () {
@@ -87,7 +88,8 @@ export default {
         resourceDescription: '',
         resourceImage: '',
         resourceFile: ''
-      }
+      },
+      buttonType: BUTTON_TYPE
     }
   },
   methods: {

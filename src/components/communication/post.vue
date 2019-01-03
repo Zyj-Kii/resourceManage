@@ -8,11 +8,12 @@
         placeholder="帖子内容"></el-input>
       <span class="count">{{length}}/{{maxLength}}</span>
     </div>
-    <el-button @click="handlePost" type="info">发布</el-button>
+    <el-button @click="handlePost" :type="buttonType">发布</el-button>
   </div>
 </template>
 <script>
 import { post } from 'api/communication'
+import { BUTTON_TYPE } from 'common/base'
 const MAX_LENGTH = 255
 export default {
   name: 'CommunicationPost',
@@ -21,7 +22,8 @@ export default {
       loading: false,
       content: '',
       length: 0,
-      maxLength: MAX_LENGTH
+      maxLength: MAX_LENGTH,
+      buttonType: BUTTON_TYPE
     }
   },
   methods: {

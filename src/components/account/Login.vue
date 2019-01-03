@@ -28,7 +28,7 @@
                         v-model="formData.confirmPassword">
                     </el-input>
                 </el-form-item>
-                <el-button @click="submit" type="info">{{type}}</el-button>
+                <el-button @click="submit" :type="buttonType">{{type}}</el-button>
                 <a @click="swap" href="javascript:void(0)" class="toggle">{{toggle}}</a>
             </el-form>
         </div>
@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import { BUTTON_TYPE } from 'common/base'
 const HOME = 0
 const BACK = 1
 export default {
@@ -45,6 +46,7 @@ export default {
       type: '',
       toggle: '',
       errorMsg: '',
+      buttonType: BUTTON_TYPE,
       formData: {
         account: '',
         password: '',

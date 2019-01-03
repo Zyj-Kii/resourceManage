@@ -25,13 +25,14 @@
         :rows="3"
         maxlength="255"
         placeholder="输入你的评论"></el-input>
-      <el-button round @click="handleComment" type="info">发布</el-button>
+      <el-button round @click="handleComment" :type="buttonType">发布</el-button>
     </div>
   </div>
 </template>
 <script>
 import { getComment, comment } from 'api/communication'
 import { COMMENT_LIMIT } from 'common/communication'
+import { BUTTON_TYPE } from 'common/base'
 export default {
   name: 'CommunicationComment',
   props: {
@@ -43,7 +44,8 @@ export default {
     return {
       commentTable: [],
       comment: '',
-      total: 0
+      total: 0,
+      buttonType: BUTTON_TYPE
     }
   },
   methods: {

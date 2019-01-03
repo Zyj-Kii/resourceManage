@@ -30,19 +30,21 @@
           v-model="formData.confirmPassword">
         </el-input>
       </el-form-item>
-      <el-button @click="submit" type="info">更新密码</el-button>
+      <el-button @click="submit" :type="buttonType">更新密码</el-button>
       <span @click="handleBack" class="back">返回主页</span>
     </el-form>
   </div>
 </template>
 
 <script>
+import { BUTTON_TYPE } from 'common/base'
 export default {
   name: 'ModifyPassword',
   data () {
     return {
       username: '',
       role: '',
+      buttonType: BUTTON_TYPE,
       formData: {
         prePassword: '',
         newPassword: '',

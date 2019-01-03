@@ -47,7 +47,7 @@ export function cancelCollect (collectId) {
 }
 // 用户删除资源
 export function deleteResource (resourceId) {
-  const url = '/user/resource/userDeleteResource'
+  const url = '/user/resource/deleteResource'
   const data = {resourceId}
   return Vue.prototype.$get(url, data)
 }

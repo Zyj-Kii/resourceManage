@@ -10,7 +10,7 @@ import RHeader from 'components/basic/r-header'
 export default {
   name: 'AdminIndex',
   created () {
-    this.defaultActive = '/admin/student/list'
+    this.defaultActive = '/admin/student/list '
     this.headerList = [
       {
         title: '学生管理',
