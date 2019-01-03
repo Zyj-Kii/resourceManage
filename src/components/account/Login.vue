@@ -186,7 +186,7 @@ export default {
     },
     _goHome () {
       if (this.formData.role === 'admin') {
-        this.$router.push({path: '/admin'})
+        this.$router.push({path: '/admin/student/list'})
       } else {
         this.$router.push({path: '/user/resource/browse'})
       }

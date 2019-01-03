@@ -74,6 +74,9 @@ export default {
             }, 1500)
           }
         })
+        .catch(err => {
+          this.$errorNotify(err)
+        })
     }
   },
   components: {

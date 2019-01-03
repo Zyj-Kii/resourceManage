@@ -1,16 +1,21 @@
 <template>
   <div>
     <r-header
+      @logout="handleLogout"
       :default-active="defaultActive"
       :header="headerList"></r-header>
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
   </div>
 </template>
 <script>
 import RHeader from 'components/basic/r-header'
+import { logout } from 'api/admin'
 export default {
   name: 'AdminIndex',
   created () {
-    this.defaultActive = '/admin/student/list '
+    this.defaultActive = '/admin/student/list'
     this.headerList = [
       {
         title: '学生管理',
@@ -37,8 +42,41 @@ export default {
             route: '/admin/search/class'
           }
         ]
+      },
+      {
+        title: '资源管理',
+        submenu: [
+          {
+            title: '查看所有资源',
+            route: '/admin/resource/browse'
+          },
+          {
+            title: '资源信息',
+            route: '/admin/resource/info'
+          },
+          {
+            title: '添加资源类型',
+            route: '/admin/resource/category'
+          }
+        ]
       }
     ]
+  },
+  methods: {
+    handleLogout () {
+      logout()
+        .then(() => {
+          this.$successToast('退出登录成功')
+          sessionStorage.removeItem('role')
+          sessionStorage.removeItem('username')
+          setTimeout(() => {
+            this.$router.push({path: '/account/signin'})
+          }, 1500)
+        })
+        .catch(err => {
+          this.$errorNotify(err)
+        })
+    }
   },
   components: {
     RHeader

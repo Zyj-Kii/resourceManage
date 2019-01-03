@@ -1,15 +1,21 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+// 账号相关页面
 import BaseAccount from 'components/account/BaseAccount'
 import Login from 'components/account/Login'
 import ModifyPassword from 'components/account/ModifyPassword'
+
+// 用户相关页面
 import User from 'components/basic/user'
 import ResourceUpload from 'components/resource/upload'
 import ResourceBrowse from 'components/resource/browse'
 import CommunicationBrowse from 'components/communication/browse'
 import CommunicationPost from 'components/communication/post'
 
+// 管理员页面
 import Admin from 'components/basic/admin'
+import StudentList from 'components/student/list'
+
 Vue.use(Router)
 
 const router = new Router({
@@ -84,7 +90,14 @@ const router = new Router({
       path: '/admin',
       name: 'Admin',
       meta: {requireAuth: true},
-      component: Admin
+      component: Admin,
+      children: [
+        {
+          path: 'student/list',
+          name: 'StudentList',
+          component: StudentList
+        }
+      ]
     },
     {
       path: '*',
