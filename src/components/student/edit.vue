@@ -38,6 +38,13 @@ export default {
       this.$emit('hiddenDialog')
     },
     confirmForm () {
+      const currentData = this.currentData
+      for (let formKey in currentData) {
+        if (currentData[formKey] === '') {
+          this.$errorToast(`${formKey} 字段不能留空`)
+          return false
+        }
+      }
       this.$emit('confirmForm')
     }
   }

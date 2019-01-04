@@ -15,3 +15,8 @@ export function editStudent (data) {
   const url = '/admin/adminStudent/modifyStudentInfo'
   return Vue.prototype.$post(url, data)
 }
+// 录入学生信息
+export function inputStudent (data) {
+  const url = '/admin/adminStudent/addStudent'
+  return Vue.prototype.$post(url, data)
+}

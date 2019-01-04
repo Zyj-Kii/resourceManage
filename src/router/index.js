@@ -15,6 +15,7 @@ import CommunicationPost from 'components/communication/post'
 // 管理员页面
 import Admin from 'components/basic/admin'
 import StudentList from 'components/student/list'
+import StudentInput from 'components/student/input'
 
 Vue.use(Router)
 
@@ -96,6 +97,11 @@ const router = new Router({
           path: 'student/list',
           name: 'StudentList',
           component: StudentList
+        },
+        {
+          path: 'student/input',
+          name: 'StudentInput',
+          component: StudentInput
         }
       ]
     },

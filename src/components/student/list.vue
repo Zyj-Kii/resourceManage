@@ -29,7 +29,7 @@
       :visible.sync="editDialogShow"
       width="20%">
       <edit
-        :initForm="tableInit"
+        :initForm="initEditForm"
         :currentData="currentData"
         @hiddenDialog="hiddenDialog"
         @confirmForm="confirmEditForm"></edit>
@@ -50,7 +50,8 @@ export default {
       pageSize: STUDENT_LIMIT,
       buttonType: BUTTON_TYPE,
       editDialogShow: false,
-      currentData: null
+      currentData: null,
+      editIndex: -1
     }
   },
   methods: {
@@ -58,6 +59,7 @@ export default {
       this._getStudentList(page)
     },
     handleEdit (index) {
+      this.editIndex = index
       this.currentData = Object.assign({}, this.tableData[index])
       this.editDialogShow = true
     },
@@ -68,6 +70,7 @@ export default {
       editStudent(this.currentData)
         .then(() => {
           this.$successToast('修改学生信息成功')
+          this.$set(this.tableData, this.editIndex, this.currentData)
           this.editDialogShow = false
         })
         .catch(err => {
@@ -91,6 +94,20 @@ export default {
         label: '姓名',
         prop: 'studentName'
       },
+      {
+        label: '班级',
+        prop: 'studentClass'
+      },
+      {
+        label: '班导师',
+        prop: 'studentTeacher'
+      },
+      {
+        label: '简介',
+        prop: 'studentIntroduction'
+      }
+    ]
+    this.initEditForm = [
       {
         label: '班级',
         prop: 'studentClass'
