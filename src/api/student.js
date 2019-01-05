@@ -20,3 +20,29 @@ export function inputStudent (data) {
   const url = '/admin/adminStudent/addStudent'
   return Vue.prototype.$post(url, data)
 }
+// 查找学生
+export function searchStudent (type, field) {
+  let url
+  let data
+  if (type === 'username') {
+    url = '/user/searchUserByName'
+    data = {
+      userName: field
+    }
+  } else {
+    url = '/user/searchUserByClass'
+    data = {
+      studentClass: field
+    }
+  }
+  return Vue.prototype.$post(url, data)
+}
+// 禁/允 发帖子
+export function postControl (userId, forbidden) {
+  const url = '/admin/adminUser/forbidUserPost'
+  const data = {
+    userId,
+    forbidden
+  }
+  return Vue.prototype.$get(url, data)
+}

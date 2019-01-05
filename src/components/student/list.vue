@@ -1,23 +1,16 @@
 <template>
   <div class="container">
     <template v-if="tableData">
-      <el-table :data="tableData">
-        <el-table-column
-          v-for="(item, key) of tableInit"
-          :key="key"
-          :label="item.label"
-          :prop="item.prop"
-          align="center"></el-table-column>
-        <el-table-column align="center" label="操作">
-          <template slot-scope="scope">
-            <el-button
-              :type="buttonType"
-              round
-              @click="handleEdit(scope.$index)">编辑 <i class="el-icon-edit el-icon--right"></i>
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+      <basic-table :tableInit="tableInit" :tableData="tableData">
+        <template slot-scope="scope">
+          <el-button
+            :type="buttonType"
+            round
+            size="small"
+            @click="handleEdit(scope.$index)">编辑 <i class="el-icon-edit el-icon--right"></i>
+          </el-button>
+        </template>
+      </basic-table>
     </template>
     <el-pagination
       v-show="total > 0"
@@ -38,6 +31,7 @@
 </template>
 <script>
 import Edit from 'components/basic/edit'
+import BasicTable from 'components/basic/table'
 import { getStudentList, editStudent } from 'api/student'
 import { STUDENT_LIMIT } from 'common/student'
 import { BUTTON_TYPE } from 'common/base'
@@ -123,7 +117,8 @@ export default {
     ]
   },
   components: {
-    Edit
+    Edit,
+    BasicTable
   }
 }
 </script>

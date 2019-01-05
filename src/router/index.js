@@ -18,6 +18,7 @@ import StudentList from 'components/student/list'
 import StudentInput from 'components/student/add'
 import ResourceInfo from 'components/category/list'
 import AddCategory from 'components/category/add'
+import SearchStudent from 'components/student/search'
 Vue.use(Router)
 
 const router = new Router({
@@ -107,6 +108,11 @@ const router = new Router({
           path: 'student/input',
           name: 'StudentInput',
           component: StudentInput
+        },
+        {
+          path: 'student/search',
+          name: 'SearchStudent',
+          component: SearchStudent
         },
         {
           path: 'category/info',

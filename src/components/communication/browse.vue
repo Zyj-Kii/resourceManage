@@ -1,47 +1,33 @@
 <template>
   <div class="container">
-    <template v-if="tableData">
-      <el-table
-        stripe
-        size="medium"
-        :data="tableData">
-        <el-table-column
-          v-for="(item, key) of tableInit"
-          :key="key"
-          align="center"
-          :prop="item.prop"
-          :label="item.label"></el-table-column>
-        <el-table-column
-          label="操作"
-          align="center">
-          <template slot-scope="scope">
-            <el-button
-              :type="buttonType"
-              round
-              @click="handleGetComment(scope.row.messageId)"
-              size="mini">查看评论</el-button>
-            <template v-if="operation === 'delete'">
-              <el-button
-                size="mini"
-                @click="handleDelete(scope.row.messageId)"
-                type="danger" round>删除帖子<i class="el-icon-delete el-icon--right"></i></el-button>
-            </template>
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-pagination
-        :total="total"
-        layout="prev, pager, next"
-        @current-change="handleCurrentPageChange"
-        :current-page.sync="currentPage"
-        :page-size="pageSize"></el-pagination>
-    </template>
+    <basic-table :tableInit="tableInit" :tableData="tableData">
+      <template slot-scope="scope">
+        <el-button
+          :type="buttonType"
+          round
+          @click="handleGetComment(scope.row.messageId)"
+          size="mini">查看评论</el-button>
+        <template v-if="operation === 'delete'">
+          <el-button
+            size="mini"
+            @click="handleDelete(scope.row.messageId)"
+            type="danger" round>删除帖子<i class="el-icon-delete el-icon--right"></i></el-button>
+        </template>
+      </template>
+    </basic-table>
+    <el-pagination
+      :total="total"
+      layout="prev, pager, next"
+      @current-change="handleCurrentPageChange"
+      :current-page.sync="currentPage"
+      :page-size="pageSize"></el-pagination>
     <el-dialog title="评论" :visible.sync="dialogShow">
       <comment @hideDialog="handleHideDialog" :postId="currentPostId"></comment>
     </el-dialog>
   </div>
 </template>
 <script>
+import BasicTable from 'components/basic/table'
 import { getPost, deletePost } from 'api/communication'
 import { POST_LIMIT } from 'common/communication'
 import { BUTTON_TYPE } from 'common/base'
@@ -149,7 +135,8 @@ export default {
     }
   },
   components: {
-    Comment
+    Comment,
+    BasicTable
   }
 }
 </script>

@@ -31,17 +31,8 @@ export default {
         ]
       },
       {
-        title: '用户管理',
-        submenu: [
-          {
-            title: '用户名查找',
-            route: '/admin/search/username'
-          },
-          {
-            title: '班级查找',
-            route: '/admin/search/class'
-          }
-        ]
+        title: '用户查找',
+        route: '/admin/student/search'
       },
       {
         title: '资源管理',

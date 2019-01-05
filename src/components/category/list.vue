@@ -1,35 +1,25 @@
 <template>
   <div class="container">
-    <template>
-      <el-table v-if="tableData.length > 0" :data="tableData">
-        <el-table-column
-          v-for="(item, key) of initTable"
-          :key="key"
-          :label="item.label"
-          :prop="item.prop"
-          align="center"></el-table-column>
-        <el-table-column label="操作" align="center">
-          <template slot-scope="scope">
-            <el-button
-              :type="buttonType"
-              round
-              size="small"
-              @click="handleEdit(scope.$index)">编辑 <i class="el-icon-edit el-icon--right"></i>
-            </el-button>
-            <el-button
-              round
-              type="danger"
-              size="small"
-              @click="deleteCategory(scope.row.categoryId)">删除 <i class="el-icon-delete el-icon--right"></i></el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-pagination
-        :total="total"
-        :page-size="pageSize"
-        :current-page.sync="currentPage"
-        @current-change="handlePageChange"></el-pagination>
-    </template>
+    <basic-table :tableData="tableData" :tableInit="initTable">
+      <template slot-scope="scope">
+        <el-button
+          :type="buttonType"
+          round
+          size="small"
+          @click="handleEdit(scope.$index)">编辑 <i class="el-icon-edit el-icon--right"></i>
+        </el-button>
+        <el-button
+          round
+          type="danger"
+          size="small"
+          @click="deleteCategory(scope.row.categoryId)">删除 <i class="el-icon-delete el-icon--right"></i></el-button>
+      </template>
+    </basic-table>
+    <el-pagination
+      :total="total"
+      :page-size="pageSize"
+      :current-page.sync="currentPage"
+      @current-change="handlePageChange"></el-pagination>
     <el-dialog
       :visible.sync="editDialogShow"
       width="20%">
@@ -43,6 +33,7 @@
 </template>
 <script>
 import Edit from 'components/basic/edit'
+import BasicTable from 'components/basic/table'
 import { getResourceCategory, deleteCategory, modifyCategory } from 'api/category'
 import { CATEGORY_SIZE } from 'common/category'
 import { BUTTON_TYPE } from 'common/base'
@@ -117,7 +108,8 @@ export default {
     this._getResourceCategory(1)
   },
   components: {
-    Edit
+    Edit,
+    BasicTable
   }
 }
 </script>
