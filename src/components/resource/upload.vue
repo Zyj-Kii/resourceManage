@@ -60,7 +60,8 @@
   </div>
 </template>
 <script>
-import { upload, getResourceCategory } from 'api/resource'
+import { upload } from 'api/resource'
+import { getResourceCategory } from 'api/category'
 import { BUTTON_TYPE } from 'common/base'
 export default {
   name: 'ResourceUpload',

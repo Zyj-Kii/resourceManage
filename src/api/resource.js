@@ -6,15 +6,6 @@ export function upload (formData) {
   const url = '/user/resource/uploadResource'
   return Vue.prototype.$post(url, formData)
 }
-// 获取资源类型
-export function getResourceCategory () {
-  const url = '/common/category/getCategory'
-  const data = {
-    page: 1,
-    limit: 100
-  }
-  return Vue.prototype.$post(url, data)
-}
 // 获取某个类型下的资源
 export function getResource (categoryId, page) {
   let url

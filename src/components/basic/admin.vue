@@ -52,11 +52,11 @@ export default {
           },
           {
             title: '资源信息',
-            route: '/admin/resource/info'
+            route: '/admin/category/info'
           },
           {
             title: '添加资源类型',
-            route: '/admin/resource/category'
+            route: '/admin/category/add'
           }
         ]
       }

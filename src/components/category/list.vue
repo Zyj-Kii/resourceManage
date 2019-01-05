@@ -1,35 +1,40 @@
 <template>
   <div class="container">
-    <template v-if="tableData">
-      <el-table :data="tableData">
+    <template>
+      <el-table v-if="tableData.length > 0" :data="tableData">
         <el-table-column
-          v-for="(item, key) of tableInit"
+          v-for="(item, key) of initTable"
           :key="key"
           :label="item.label"
           :prop="item.prop"
           align="center"></el-table-column>
-        <el-table-column align="center" label="操作">
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button
               :type="buttonType"
               round
+              size="small"
               @click="handleEdit(scope.$index)">编辑 <i class="el-icon-edit el-icon--right"></i>
             </el-button>
+            <el-button
+              round
+              type="danger"
+              size="small"
+              @click="deleteCategory(scope.row.categoryId)">删除 <i class="el-icon-delete el-icon--right"></i></el-button>
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination
+        :total="total"
+        :page-size="pageSize"
+        :current-page.sync="currentPage"
+        @current-change="handlePageChange"></el-pagination>
     </template>
-    <el-pagination
-      v-show="total > 0"
-      layout="prev, pager, next"
-      @current-change="handlePageChange"
-      :page-size="pageSize"
-      :total="total"></el-pagination>
     <el-dialog
       :visible.sync="editDialogShow"
       width="20%">
       <edit
-        :initForm="initEditForm"
+        :initForm="initTable"
         :currentData="currentData"
         @hiddenDialog="hiddenDialog"
         @confirmForm="confirmEditForm"></edit>
@@ -38,96 +43,85 @@
 </template>
 <script>
 import Edit from 'components/basic/edit'
-import { getStudentList, editStudent } from 'api/student'
-import { STUDENT_LIMIT } from 'common/student'
+import { getResourceCategory, deleteCategory, modifyCategory } from 'api/category'
+import { CATEGORY_SIZE } from 'common/category'
 import { BUTTON_TYPE } from 'common/base'
 export default {
-  name: 'StudentList',
+  name: 'ResourceCategory',
   data () {
     return {
-      tableData: null,
-      total: 0,
-      pageSize: STUDENT_LIMIT,
+      tableData: [],
+      editIndex: -1,
       buttonType: BUTTON_TYPE,
+      total: -1,
+      pageSize: CATEGORY_SIZE,
       editDialogShow: false,
       currentData: null,
-      editIndex: -1
+      currentPage: -1
     }
   },
   methods: {
     handlePageChange (page) {
-      this._getStudentList(page)
+      this._getResourceCategory(page)
+    },
+    hiddenDialog () {
+      this.editDialogShow = false
     },
     handleEdit (index) {
       this.editIndex = index
       this.currentData = Object.assign({}, this.tableData[index])
       this.editDialogShow = true
     },
-    hiddenDialog () {
-      this.editDialogShow = false
-    },
-    confirmEditForm () {
-      editStudent(this.currentData)
+    deleteCategory (categoryId) {
+      deleteCategory(categoryId)
         .then(() => {
-          this.$successToast('修改学生信息成功')
-          this.$set(this.tableData, this.editIndex, this.currentData)
-          this.editDialogShow = false
+          this.$successToast('删除资源类型成功')
+          this._getResourceCategory(this.currentPage)
         })
         .catch(err => {
           this.$errorNotify(err)
         })
     },
-    _getStudentList (page) {
-      getStudentList(page)
+    confirmEditForm () {
+      modifyCategory(this.currentData)
+        .then(() => {
+          this.$set(this.tableData, this.editIndex, this.currentData)
+          this.editDialogShow = false
+          this.$successToast('修改资源信息成功')
+        })
+        .catch(err => {
+          this.$errorNotify(err)
+        })
+    },
+    _getResourceCategory (page) {
+      getResourceCategory(page, CATEGORY_SIZE)
         .then(res => {
           this.tableData = res.dataList
           this.total = res.databaseSum
         })
     }
   },
-  mounted () {
-    this._getStudentList(1)
-  },
   created () {
-    this.tableInit = [
+    this.initTable = [
       {
-        label: '姓名',
-        prop: 'studentName'
+        label: '资源名称',
+        prop: 'categoryName'
       },
       {
-        label: '班级',
-        prop: 'studentClass'
-      },
-      {
-        label: '班导师',
-        prop: 'studentTeacher'
-      },
-      {
-        label: '简介',
-        prop: 'studentIntroduction'
+        label: '资源描述',
+        prop: 'categoryDescription'
       }
     ]
-    this.initEditForm = [
-      {
-        label: '班级',
-        prop: 'studentClass'
-      },
-      {
-        label: '班导师',
-        prop: 'studentTeacher'
-      },
-      {
-        label: '简介',
-        prop: 'studentIntroduction'
-      }
-    ]
+  },
+  mounted () {
+    this._getResourceCategory(1)
   },
   components: {
     Edit
   }
 }
 </script>
-<style lang="stylus" scoped>
+<style lang="stylus">
 .container
   width 80%
   margin auto

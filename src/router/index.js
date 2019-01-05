@@ -15,8 +15,9 @@ import CommunicationPost from 'components/communication/post'
 // 管理员页面
 import Admin from 'components/basic/admin'
 import StudentList from 'components/student/list'
-import StudentInput from 'components/student/input'
-
+import StudentInput from 'components/student/add'
+import ResourceInfo from 'components/category/list'
+import AddCategory from 'components/category/add'
 Vue.use(Router)
 
 const router = new Router({
@@ -84,6 +85,10 @@ const router = new Router({
           name: 'PrivateResource',
           meta: {requireAuth: true},
           component: ResourceBrowse
+        },
+        {
+          path: '*',
+          redirect: '/user/resource/browse'
         }
       ]
     },
@@ -102,12 +107,22 @@ const router = new Router({
           path: 'student/input',
           name: 'StudentInput',
           component: StudentInput
+        },
+        {
+          path: 'category/info',
+          name: 'ResourceInfo',
+          component: ResourceInfo
+        },
+        {
+          path: 'category/add',
+          name: 'CategoryAdd',
+          component: AddCategory
+        },
+        {
+          path: '*',
+          redirect: '/admin/student/list'
         }
       ]
-    },
-    {
-      path: '*',
-      redirect: 'user/resource/browse'
     }
   ]
 })

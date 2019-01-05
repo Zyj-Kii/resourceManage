@@ -78,11 +78,11 @@
 </template>
 <script>
 import {
-  getResourceCategory,
   getResource,
   collectResource,
   deleteResource,
   cancelCollect} from 'api/resource'
+import { getResourceCategory } from 'api/category'
 import { RESOURCE_PAGE_SIZE } from 'common/resource'
 import { BUTTON_TYPE } from 'common/base'
 import download from 'downloadjs'

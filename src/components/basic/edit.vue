@@ -18,7 +18,7 @@
 <script>
 import { BUTTON_TYPE } from 'common/base'
 export default {
-  name: 'StudentEdit',
+  name: 'Edit',
   props: {
     initForm: {
       type: Array,

@@ -14,73 +14,46 @@
         </el-form-item>
         <el-button
           :type="buttonType"
-          @click="inputStudent">录入</el-button>
+          @click="confirm">录入</el-button>
     </el-form>
   </div>
 </template>
 <script>
 import { BUTTON_TYPE } from 'common/base'
-import { inputStudent } from 'api/student'
 export default {
   name: 'InputStudent',
-  data () {
-    return {
-      formData: {
-        studentName: '',
-        studentClass: '',
-        studentTeacher: '',
-        studentIntroduction: ''
-      },
-      buttonType: BUTTON_TYPE
+  props: {
+    formData: {
+      type: Object,
+      required: true
+    },
+    initForm: {
+      type: Array,
+      required: true
     }
   },
   methods: {
-    inputStudent () {
+    confirm () {
       this.$refs.form.validate(valid => {
         if (valid) {
-          const formData = this.formData
-          inputStudent(formData)
-            .then(() => {
-              this.$successToast('录入学生信息成功')
-              for (let formItem in formData) {
-                formData[formItem] = ''
-              }
-            })
-            .catch(err => {
-              this.$errorNotify(err)
-            })
+          this.$emit('confirm')
         }
       })
     }
   },
   created () {
-    this.initForm = [
-      {
-        label: '姓名',
-        prop: 'studentName'
-      },
-      {
-        label: '班级',
-        prop: 'studentClass'
-      },
-      {
-        label: '班导师',
-        prop: 'studentTeacher'
-      },
-      {
-        label: '简介',
-        prop: 'studentIntroduction'
-      }
-    ]
     this.rules = {}
-    this.formData = {}
     for (let formItem of this.initForm) {
+      if (formItem.required === false) {
+        continue
+      }
       this.rules[formItem.prop] = [{
         required: true,
         message: `${formItem.prop} 不能为空`,
         trigger: 'blur'
       }]
     }
+    this.buttonType = BUTTON_TYPE
   }
 }
 </script>
