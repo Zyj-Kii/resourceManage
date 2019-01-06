@@ -125,6 +125,11 @@ const router = new Router({
           component: AddCategory
         },
         {
+          path: 'resource/browse',
+          name: 'ResourceControl',
+          component: ResourceBrowse
+        },
+        {
           path: '*',
           redirect: '/admin/student/list'
         }

@@ -1,22 +1,20 @@
 <template>
-  <div class="container">
-    <el-table stripe :data="tableData">
-      <el-table-column
-        v-for="(item, key) of tableInit"
-        :key="key"
-        :label="item.label"
-        :prop="item.prop"
-        align="center"></el-table-column>
-      <el-table-column align="center" label="操作">
-        <template slot-scope="scope">
-          <slot
-            :$index="scope.$index"
-            :row="scope.row"
-          ></slot>
-        </template>
-      </el-table-column>
-    </el-table>
-  </div>
+  <el-table stripe :data="tableData">
+    <el-table-column
+      v-for="(item, key) of tableInit"
+      :key="key"
+      :label="item.label"
+      :prop="item.prop"
+      align="center"></el-table-column>
+    <el-table-column align="center" label="操作">
+      <template slot-scope="scope">
+        <slot
+          :$index="scope.$index"
+          :row="scope.row"
+        ></slot>
+      </template>
+    </el-table-column>
+  </el-table>
 </template>
 <script>
 export default {
@@ -33,11 +31,3 @@ export default {
   }
 }
 </script>
-<style lang="stylus" scoped>
-.container
-  width 80%
-  margin auto
-  text-align center
-  .el-pagination
-    margin-top 10px
-</style>
