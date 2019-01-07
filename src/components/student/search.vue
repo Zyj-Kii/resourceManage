@@ -22,12 +22,12 @@
     <template v-if="tableData.length > 0">
       <base-table :tableInit="tableInit" :tableData="tableData">
         <template slot-scope="scope">
-          <template v-if="scope !== FORBIDDEN">
+          <template v-if="scope.row.forbidden !== FORBIDDEN">
             <el-button
               type="danger"
               round
               size="small"
-              @click="forbiddenPost(scope)">禁止发帖 <i class="el-icon-error el-icon--right"></i>
+              @click="forbiddenPost(scope.$index)">禁止发帖 <i class="el-icon-error el-icon--right"></i>
             </el-button>
           </template>
           <template v-else>
@@ -35,7 +35,7 @@
               type="success"
               round
               size="small"
-              @click="allowPost(scope)">允许发帖 <i class="el-icon-success el-icon--right"></i>
+              @click="allowPost(scope.$index)">允许发帖 <i class="el-icon-success el-icon--right"></i>
             </el-button>
           </template>
         </template>
@@ -45,8 +45,8 @@
 </template>
 <script>
 import { BUTTON_TYPE } from 'common/base'
-import { FORBIDDEN } from 'common/student'
-import { searchStudent } from 'api/student'
+import { FORBIDDEN, ALLOW } from 'common/student'
+import { searchStudent, postControl } from 'api/student'
 import BaseTable from 'components/basic/table'
 export default {
   name: 'SearchStudent',
@@ -86,11 +86,27 @@ export default {
           this.$errorNotify(err)
         })
     },
-    forbiddenPost (id) {
-      console.log(id)
+    forbiddenPost (index) {
+      const userId = this.tableData[index].userId
+      postControl(userId, FORBIDDEN)
+        .then(() => {
+          this.$successToast('禁止发帖成功')
+          this.tableData[index].forbidden = FORBIDDEN
+        })
+        .catch(err => {
+          this.$errorNotify(err)
+        })
     },
-    allowPost (id) {
-      console.log(id)
+    allowPost (index) {
+      const userId = this.tableData[index].userId
+      postControl(userId, ALLOW)
+        .then(() => {
+          this.$successToast('允许发帖成功')
+          this.tableData[index].forbidden = ALLOW
+        })
+        .catch(err => {
+          this.$errorNotify(err)
+        })
     }
   },
   computed: {

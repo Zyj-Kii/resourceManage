@@ -14,8 +14,10 @@ export function getResource (categoryId, page) {
     url = '/common/resource/getAllResource'
   } else if (name === 'PrivateResource') {
     url = '/user/resource/getResource'
-  } else {
+  } else if (name === 'PrivateCollect') {
     url = '/user/collect/getCollect'
+  } else if (name === 'ResourceControl') {
+    url = '/common/resource/getAllResource'
   }
   const data = {
     categoryId,
@@ -40,5 +42,17 @@ export function cancelCollect (collectId) {
 export function deleteResource (resourceId) {
   const url = '/user/resource/deleteResource'
   const data = {resourceId}
+  return Vue.prototype.$get(url, data)
+}
+// 管理员删除资源
+export function adminDelete (resourceId) {
+  const url = '/admin/resource/deleteResource'
+  const data = {resourceId}
+  return Vue.prototype.$get(url, data)
+}
+// 管理员标记资源等级
+export function markResourceLevel (resourceId, resourceLevel) {
+  const url = '/admin/resource/markResourceLevel'
+  const data = {resourceId, resourceLevel}
   return Vue.prototype.$get(url, data)
 }

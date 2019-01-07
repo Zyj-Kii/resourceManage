@@ -57,11 +57,26 @@
                 @click="handleCancelCollect(scope.row.collectId)"
                 type="warning" round>取消收藏<i class="el-icon-star-off el-icon--right"></i></el-button>
             </template>
-            <template v-else>
+            <template v-else-if="operation === 'delete'">
               <el-button
                 size="mini"
                 @click="handleDelete(scope.row.resourceId)"
-                type="danger" round>删除资源<i class="el-icon-delete el-icon--right"></i></el-button>
+                type="danger"
+                round>删除资源<i class="el-icon-delete el-icon--right"></i></el-button>
+            </template>
+            <template v-else>
+              <el-button
+                size="mini"
+                @click="handleAdminDelete(scope.row.resourceId)"
+                type="danger"
+                round>删除<i class="el-icon-delete el-icon--right"></i>
+              </el-button>
+              <el-button
+                size="mini"
+                @click="handleMarkResourceLevel(scope.$index)"
+                type="warning"
+                round>等级<i class="el-icon-edit-outline el-icon--right"></i>
+              </el-button>
             </template>
           </template>
         </el-table-column>
@@ -74,6 +89,17 @@
       :page-size="pageSize"
       :current-page.sync="currentPage"
       :total="total"></el-pagination>
+    <el-dialog title="资源等级" :visible.sync="markResourceLevelDialog">
+       <el-radio-group v-model="markResourceLevel">
+        <el-radio-button label="primary">初级</el-radio-button>
+        <el-radio-button label="middle">中级</el-radio-button>
+        <el-radio-button label="advanced">高级</el-radio-button>
+      </el-radio-group>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="markResourceLevelDialog = false">取 消</el-button>
+        <el-button type="primary" @click="confirmMarkResourceLevel()">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -81,7 +107,9 @@ import {
   getResource,
   collectResource,
   deleteResource,
-  cancelCollect} from 'api/resource'
+  cancelCollect,
+  adminDelete,
+  markResourceLevel} from 'api/resource'
 import { getResourceCategory } from 'api/category'
 import { RESOURCE_PAGE_SIZE } from 'common/resource'
 import { BUTTON_TYPE } from 'common/base'
@@ -110,6 +138,9 @@ export default {
           prop: 'showResourceLevel'
         }
       ],
+      markResourceLevelDialog: false,
+      markResourceLevel: '',
+      markResourceLevelIndex: -1,
       buttonType: BUTTON_TYPE
     }
   },
@@ -176,6 +207,33 @@ export default {
     packUrl (url) {
       return this.$packUrl(url)
     },
+    handleAdminDelete (resourceId) {
+      adminDelete(resourceId)
+        .then(() => {
+          this.$successToast('删除资源成功！')
+          this._getResource(this.currentPage)
+        })
+        .catch(err => {
+          this.$errorNotify(err)
+        })
+    },
+    handleMarkResourceLevel (index) {
+      this.markResourceLevelDialog = true
+      this.markResourceLevelIndex = index
+      this.markResourceLevel = this.tableData[index].resourceLevel
+    },
+    confirmMarkResourceLevel () {
+      markResourceLevel(this.tableData[this.markResourceLevelIndex].resourceId, this.markResourceLevel)
+        .then(() => {
+          this.$successToast('标记资源等级成功')
+          this.tableData[this.markResourceLevelIndex].resourceLevel = this.markResourceLevel
+          this.tableData[this.markResourceLevelIndex].showResourceLevel = this.reflectLevel(this.markResourceLevel)
+          this.markResourceLevelDialog = false
+        })
+        .catch(err => {
+          this.$errorNotify(err)
+        })
+    },
     async _resourceInit () {
       try {
         const categoryType = await this._getResourceCategory()
@@ -228,6 +286,10 @@ export default {
       } else if (name === 'PrivateResource') {
         this.operation = 'delete'
         flag = true
+      } else if (name === 'ResourceControl') {
+        this._resourceInit()
+        this.operation = 'control'
+        return
       }
       if (flag) {
         this.category = []
@@ -236,6 +298,7 @@ export default {
     }
   },
   mounted () {
+    console.log('hello')
     this._setOperation(this.$route.name)
   },
   watch: {
