@@ -130,6 +130,11 @@ const router = new Router({
           component: ResourceBrowse
         },
         {
+          path: 'communicate/browse',
+          name: 'PostControl',
+          component: CommunicationBrowse
+        },
+        {
           path: '*',
           redirect: '/admin/student/list'
         }

@@ -298,7 +298,6 @@ export default {
     }
   },
   mounted () {
-    console.log('hello')
     this._setOperation(this.$route.name)
   },
   watch: {

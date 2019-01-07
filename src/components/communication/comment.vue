@@ -12,6 +12,23 @@
           <i class="el-icon-star-on" :class="{light: scope.row.commentQuality === 1}"></i>
         </template>
       </el-table-column>
+      <el-table-column label="操作" align="center" v-if="isAdmin">
+        <template slot-scope="scope">
+          <el-button
+            v-if="scope.row.commentQuality === HIGH_QUALITY"
+            size="mini"
+            type="warning"
+            @click="setCommonQualty(scope.row.commentId)"
+            round
+            >设为普通</el-button>
+          <el-button
+            v-else
+            type="primary"
+            round
+            @click="setHighQualty(scope.row.commentId)"
+            size="mini">设为高质量</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <el-pagination
       :page-size="pageSize"
@@ -30,9 +47,11 @@
   </div>
 </template>
 <script>
-import { getComment, comment } from 'api/communication'
+import { getComment, comment, setCommentQuality } from 'api/communication'
 import { COMMENT_LIMIT } from 'common/communication'
 import { BUTTON_TYPE } from 'common/base'
+const HIGH_QUALITY = 1
+const COMMON_QUALITY = 0
 export default {
   name: 'CommunicationComment',
   props: {
@@ -45,7 +64,8 @@ export default {
       commentTable: [],
       comment: '',
       total: 0,
-      buttonType: BUTTON_TYPE
+      buttonType: BUTTON_TYPE,
+      HIGH_QUALITY: HIGH_QUALITY
     }
   },
   methods: {
@@ -67,6 +87,24 @@ export default {
     },
     handlePageChange (page) {
       this._getComment(this.postId, page)
+    },
+    setHighQuality (commentId) {
+      setCommentQuality(commentId, HIGH_QUALITY)
+        .then(() => {
+          this.$successToast('设置为高质量评论成功')
+        })
+        .catch(err => {
+          this.$errorNotify(err)
+        })
+    },
+    setCommonQuality (commentId) {
+      setCommentQuality(commentId, COMMON_QUALITY)
+        .then(() => {
+          this.$successToast('设置为普通质量评论成功')
+        })
+        .catch(err => {
+          this.$errorNotify(err)
+        })
     },
     _reflectRole (role) {
       switch (role) {
@@ -98,8 +136,12 @@ export default {
   },
   mounted () {
     this._getComment(this.postId, 1)
+    if (this.$route.name === 'PostControl') {
+      this.isAdmin = true
+    }
   },
   created () {
+    this.isAdmin = false
     this.tableInit = [
       {
         label: '用户',

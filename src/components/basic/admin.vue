@@ -50,6 +50,10 @@ export default {
             route: '/admin/category/add'
           }
         ]
+      },
+      {
+        title: '交流区管理',
+        route: '/admin/communicate/browse'
       }
     ]
   },

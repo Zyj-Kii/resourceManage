@@ -13,6 +13,12 @@
             @click="handleDelete(scope.row.messageId)"
             type="danger" round>删除帖子<i class="el-icon-delete el-icon--right"></i></el-button>
         </template>
+        <template v-else-if="operation === 'control'">
+          <el-button
+            size="mini"
+            @click="handleAdminDelete(scope.row.messageId)"
+            type="danger" round>删除帖子<i class="el-icon-delete el-icon--right"></i></el-button>
+        </template>
       </template>
     </basic-table>
     <el-pagination
@@ -28,7 +34,7 @@
 </template>
 <script>
 import BasicTable from 'components/basic/table'
-import { getPost, deletePost } from 'api/communication'
+import { getPost, deletePost, adminDeletePost } from 'api/communication'
 import { POST_LIMIT } from 'common/communication'
 import { BUTTON_TYPE } from 'common/base'
 import Comment from 'components/communication/comment'
@@ -36,7 +42,7 @@ export default {
   name: 'CommunicationBrowse',
   data () {
     return {
-      tableData: null,
+      tableData: [],
       dialogShow: false,
       buttonType: BUTTON_TYPE,
       currentPostId: 0,
@@ -69,6 +75,16 @@ export default {
           this.$errorNotify(err)
         })
     },
+    handleAdminDelete (postId) {
+      adminDeletePost(postId)
+        .then(() => {
+          this.$successToast('删除帖子成功')
+          this._getPost(this.currentPage)
+        })
+        .catch(err => {
+          this.$errorNotify(err)
+        })
+    },
     _getPost (page) {
       getPost(page)
         .then(res => {
@@ -85,7 +101,7 @@ export default {
     _setTableInit () {
       const name = this.$route.name
       let flag = false
-      if (name === 'CommunicationBrowse') {
+      if (name === 'CommunicationBrowse' || name === 'PostControl') {
         this.tableInit = [
           {
             label: '用户',
@@ -100,7 +116,7 @@ export default {
             prop: 'showSendTime'
           }
         ]
-        this.operation = 'none'
+        this.operation = name === 'PostControl' ? 'control' : 'none'
         flag = true
       } else if (name === 'PrivatePost') {
         this.tableInit = [

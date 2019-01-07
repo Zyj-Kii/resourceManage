@@ -4,9 +4,10 @@ import { POST_LIMIT, COMMENT_LIMIT } from 'common/communication'
 // 获取帖子 根据路由判断获取所有帖子还是获取用户的帖子
 export function getPost (page) {
   let url
-  if (Router.history.current.path === '/user/communicate/browse') {
+  const name = Router.history.current.name
+  if (name === 'PostControl' || name === 'CommunicationBrowse') {
     url = '/common/message/getAllMessage'
-  } else {
+  } else if (name === 'PrivatePost') {
     url = '/user/message/getMessage'
   }
   const limit = POST_LIMIT
@@ -46,5 +47,17 @@ export function comment (messageId, commentContent) {
 export function deletePost (messageId) {
   const url = '/user/message/deleteMessage'
   const data = {messageId}
+  return Vue.prototype.$get(url, data)
+}
+// 管理员删除帖子
+export function adminDeletePost (messageId) {
+  const url = '/admin/message/deleteMessage'
+  const data = {messageId}
+  return Vue.prototype.$get(url, data)
+}
+// 设置评论质量
+export function setCommentQuality (commentId, commentQuality) {
+  const url = '/admin/comment/markCommentQuality'
+  const data = {commentId, commentQuality}
   return Vue.prototype.$get(url, data)
 }
