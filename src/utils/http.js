@@ -36,39 +36,21 @@ axios.interceptors.request.use(
 )
 // http response 拦截器
 axios.interceptors.response.use(response => {
-  if (response.status === 200 && response.data.code === UNAUTHORIZED) {
+  if (response.data.code === UNAUTHORIZED) {
     sessionStorage.setItem('goback', 1)
     Router.push({path: '/account/signin'})
-    return response
+    return response.data
+  } else if (response.data.code !== ERR_OK) {
+    return Promise.reject(response.data.message)
   } else {
-    return response
+    return response.data
   }
 })
+
 export function $get (url, params = {}) {
-  return new Promise((resolve, reject) => {
-    axios.get(url, {params})
-      .then(response => {
-        response = response.data
-        if (response.code === ERR_OK) {
-          resolve(response)
-        } else {
-          reject(response.message)
-        }
-      })
-      .catch(error => reject(error))
-  })
+  return axios.get(url, {params})
 }
+
 export function $post (url, params = {}) {
-  return new Promise((resolve, reject) => {
-    axios.post(url, params)
-      .then(response => {
-        response = response.data
-        if (response.code === ERR_OK) {
-          resolve(response)
-        } else {
-          reject(response.message)
-        }
-      })
-      .catch(error => reject(error))
-  })
+  return axios.post(url, params)
 }
