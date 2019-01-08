@@ -83,6 +83,8 @@ export default {
     if (username) {
       this.username = username
       this.isLogin = true
+    } else {
+      this.isLogin = false
     }
   }
 }
