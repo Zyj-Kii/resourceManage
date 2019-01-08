@@ -18,14 +18,14 @@
             v-if="scope.row.commentQuality === HIGH_QUALITY"
             size="mini"
             type="warning"
-            @click="setCommonQualty(scope.row.commentId)"
+            @click="setCommonQuality(scope.$index)"
             round
             >设为普通</el-button>
           <el-button
             v-else
             type="primary"
             round
-            @click="setHighQualty(scope.row.commentId)"
+            @click="setHighQuality(scope.$index)"
             size="mini">设为高质量</el-button>
         </template>
       </el-table-column>
@@ -88,19 +88,23 @@ export default {
     handlePageChange (page) {
       this._getComment(this.postId, page)
     },
-    setHighQuality (commentId) {
+    setHighQuality (index) {
+      const commentId = this.commentTable[index].commentId
       setCommentQuality(commentId, HIGH_QUALITY)
         .then(() => {
           this.$successToast('设置为高质量评论成功')
+          this.commentTable[index].commentQuality = HIGH_QUALITY
         })
         .catch(err => {
           this.$errorNotify(err)
         })
     },
-    setCommonQuality (commentId) {
+    setCommonQuality (index) {
+      const commentId = this.commentTable[index].commentId
       setCommentQuality(commentId, COMMON_QUALITY)
         .then(() => {
           this.$successToast('设置为普通质量评论成功')
+          this.commentTable[index].commentQuality = COMMON_QUALITY
         })
         .catch(err => {
           this.$errorNotify(err)
