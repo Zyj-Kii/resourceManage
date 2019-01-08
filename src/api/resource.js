@@ -1,10 +1,10 @@
-import Vue from 'vue'
+import { $get, $post } from '@/utils/http'
 import Router from '@/router'
 import { RESOURCE_PAGE_SIZE } from 'common/resource'
 // 上传资源
 export function upload (formData) {
   const url = '/user/resource/uploadResource'
-  return Vue.prototype.$post(url, formData)
+  return $post(url, formData)
 }
 // 获取某个类型下的资源
 export function getResource (categoryId, page) {
@@ -24,35 +24,35 @@ export function getResource (categoryId, page) {
     page,
     limit: RESOURCE_PAGE_SIZE
   }
-  return Vue.prototype.$get(url, data)
+  return $get(url, data)
 }
 // 获取用户收藏的资源
 export function collectResource (resourceId) {
   const url = '/user/collect/collectResource'
   const data = {resourceId}
-  return Vue.prototype.$get(url, data)
+  return $get(url, data)
 }
 // 用户取消收藏
 export function cancelCollect (collectId) {
   const url = '/user/collect/deleteCollect'
   const data = {collectId}
-  return Vue.prototype.$get(url, data)
+  return $get(url, data)
 }
 // 用户删除资源
 export function deleteResource (resourceId) {
   const url = '/user/resource/deleteResource'
   const data = {resourceId}
-  return Vue.prototype.$get(url, data)
+  return $get(url, data)
 }
 // 管理员删除资源
 export function adminDelete (resourceId) {
   const url = '/admin/resource/deleteResource'
   const data = {resourceId}
-  return Vue.prototype.$get(url, data)
+  return $get(url, data)
 }
 // 管理员标记资源等级
 export function markResourceLevel (resourceId, resourceLevel) {
   const url = '/admin/resource/markResourceLevel'
   const data = {resourceId, resourceLevel}
-  return Vue.prototype.$get(url, data)
+  return $get(url, data)
 }

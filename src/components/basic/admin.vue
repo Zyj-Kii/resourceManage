@@ -11,7 +11,7 @@
 </template>
 <script>
 import RHeader from 'components/basic/r-header'
-import { logout } from 'api/admin'
+import { adminLogout } from 'api/account'
 export default {
   name: 'AdminIndex',
   created () {
@@ -59,7 +59,7 @@ export default {
   },
   methods: {
     handleLogout () {
-      logout()
+      adminLogout()
         .then(() => {
           this.$successToast('退出登录成功')
           sessionStorage.removeItem('role')

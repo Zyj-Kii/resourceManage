@@ -37,6 +37,11 @@
 
 <script>
 import { BUTTON_TYPE } from 'common/base'
+import {
+  adminLogin,
+  adminRegister,
+  userLogin,
+  userRegister } from 'api/account'
 const HOME = 0
 const BACK = 1
 export default {
@@ -105,63 +110,40 @@ export default {
     },
     submit () {
       const formData = this.formData
+      let promise
       if (this.type === '登录' && this.checkLogin()) {
-        let url
-        let data
         if (formData.role === 'admin') {
-          url = '/admin/adminLogin'
-          data = {
-            adminName: formData.account,
-            adminPassword: formData.password
-          }
+          promise = adminLogin(formData.account, formData.password)
         } else {
-          url = '/user/userLogin'
-          data = {
-            userName: formData.account,
-            userPassword: formData.password
-          }
+          promise = userLogin(formData.account, formData.password)
         }
-        this.$post(url, data)
-          .then(
-            res => {
-              if (formData.role === 'admin') {
-                sessionStorage.role = 'admin'
-              } else {
-                sessionStorage.role = 'user'
-              }
-              if (sessionStorage.getItem('goback')) {
-                sessionStorage.removeItem('goback')
-                this.successGo(BACK, '登陆成功')
-              } else {
-                sessionStorage.username = this.formData.account
-                this.successGo(HOME, '登陆成功')
-              }
+        promise
+          .then(res => {
+            sessionStorage.username = this.formData.account
+            if (formData.role === 'admin') {
+              sessionStorage.role = 'admin'
+            } else {
+              sessionStorage.role = 'user'
             }
-          )
+            if (sessionStorage.getItem('goback')) {
+              sessionStorage.removeItem('goback')
+              this.successGo(BACK, '登陆成功')
+            } else {
+              this.successGo(HOME, '登陆成功')
+            }
+          })
           .catch(error => {
             this.$errorNotify(error)
           })
       } else if (this.checkRegister()) {
-        let url
-        let data
+        let promise
         if (formData.role === 'admin') {
-          url = '/admin/adminRegister'
-          data = {
-            adminName: formData.account,
-            adminPassword: formData.password
-          }
+          promise = adminRegister(formData.account, formData.password)
         } else {
-          url = '/user/userRegister'
-          data = {
-            userName: formData.account,
-            userPassword: formData.password,
-            userRole: 'student'
-          }
-          if (formData.role === 'teacher') {
-            data.userRole = 'teacher'
-          }
+          const role = formData.role === 'teacher' ? 'teacher' : 'student'
+          promise = userRegister(formData.account, formData.password, role)
         }
-        this.$post(url, data)
+        promise
           .then(
             res => {
               if (res.code === 2000) {

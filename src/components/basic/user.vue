@@ -11,6 +11,7 @@
 </template>
 <script>
 import RHeader from 'components/basic/r-header'
+import { userLogout } from 'api/account'
 export default {
   name: 'Resource',
   created () {
@@ -63,7 +64,7 @@ export default {
   },
   methods: {
     handleLogout () {
-      this.$get('/user/userLogout')
+      userLogout()
         .then(res => {
           if (res.code === 2000) {
             this.$successToast('退出登录成功')

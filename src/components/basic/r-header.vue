@@ -1,6 +1,9 @@
 <template>
   <div>
     <header>
+      <div class="role" v-if="loginStatus">
+        你好 {{username}}
+      </div>
       <div class="account">
         <template v-if="loginStatus">
           <router-link to="/account/modify">修改密码</router-link>
@@ -57,7 +60,8 @@ export default {
   },
   data () {
     return {
-      isLogin: false
+      isLogin: false,
+      username: ''
     }
   },
   methods: {
@@ -75,7 +79,11 @@ export default {
     }
   },
   activated () {
-    this.isLogin = !!sessionStorage.getItem('username')
+    const username = sessionStorage.getItem('username')
+    if (username) {
+      this.username = username
+      this.isLogin = true
+    }
   }
 }
 </script>
@@ -87,6 +95,12 @@ header
   overflow hidden
   background-color rgb(84,92,100)
   margin-bottom 20px
+  .role
+    position absolute
+    left 20px
+    color #fff
+    line-height 60px
+    cursor pointer
   .el-menu
     float left
     margin-left 50%

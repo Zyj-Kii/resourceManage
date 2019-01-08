@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import { $get, $post } from '@/utils/http'
 import { STUDENT_LIMIT } from 'common/student'
 // 获取学生列表
 export function getStudentList (page) {
@@ -8,17 +8,17 @@ export function getStudentList (page) {
     page,
     limit
   }
-  return Vue.prototype.$get(url, data)
+  return $get(url, data)
 }
 // 修改学生信息
 export function editStudent (data) {
   const url = '/admin/adminStudent/modifyStudentInfo'
-  return Vue.prototype.$post(url, data)
+  return $post(url, data)
 }
 // 录入学生信息
 export function inputStudent (data) {
   const url = '/admin/adminStudent/addStudent'
-  return Vue.prototype.$post(url, data)
+  return $post(url, data)
 }
 // 查找学生
 export function searchStudent (type, field) {
@@ -35,7 +35,7 @@ export function searchStudent (type, field) {
       studentClass: field
     }
   }
-  return Vue.prototype.$post(url, data)
+  return $post(url, data)
 }
 // 禁/允 发帖子
 export function postControl (userId, forbidden) {
@@ -44,5 +44,5 @@ export function postControl (userId, forbidden) {
     userId,
     forbidden
   }
-  return Vue.prototype.$get(url, data)
+  return $get(url, data)
 }

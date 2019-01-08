@@ -38,6 +38,7 @@
 
 <script>
 import { BUTTON_TYPE } from 'common/base'
+import { userModify, adminModify } from 'api/account'
 export default {
   name: 'ModifyPassword',
   data () {
@@ -62,16 +63,16 @@ export default {
         this.$errorNotify('密码不一致，请重新确认')
         return false
       }
-      let url
+      let promise
       let _returnPath
       if (this.role === 'admin') {
-        url = '/admin/adminModifyPassword'
+        promise = adminModify(formData.prePassword, formData.newPassword)
         _returnPath = {path: '/admin/index'}
       } else {
-        url = '/user/userModifyPassword'
+        promise = userModify(formData.prePassword, formData.newPassword)
         _returnPath = {path: '/user/resource'}
       }
-      this.$post(url, formData)
+      promise
         .then(res => {
           if (res.code === 2000) {
             this.$successToast('修改密码成功！')
